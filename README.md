@@ -18,6 +18,8 @@ and the experiment definitions of the paper.
 (colored from start to end). Bottom: the trajectory estimated by BatSLAM 2.0 from the echoes and
 odometry alone.*
 
+**Paper:** [2026 - Steckel - BatSLAM2.pdf](paper/2026%20-%20Steckel%20-%20BatSLAM2.pdf) (submitted to IEEE
+Transactions on Robotics).
 **Video:** [a 3.5-minute overview](docs/BatSLAM2_overview.mp4) explains the method and shows a mapping run
 in simulation and on a real recording.
 
@@ -150,7 +152,7 @@ the real-world experiment).
 | `experiments/` | The experiment definitions of the paper |
 | `scripts/` | Command-line tools to run one dataset or a whole experiment |
 | `tests/` | Unit tests of the building blocks |
-| `paper/` | LaTeX source of the paper |
+| `paper/` | The paper: PDF and LaTeX source |
 | `data/` | Datasets (generated, not in the repository) |
 
 ## Citation

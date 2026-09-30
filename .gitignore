@@ -15,7 +15,7 @@ __pycache__/
 # MATLAB
 *.asv
 
-# LaTeX build output (the PDF is added separately in its final version)
+# LaTeX build output
 paper/*.aux
 paper/*.bbl
 paper/*.blg
@@ -24,4 +24,3 @@ paper/*.out
 paper/*.fls
 paper/*.fdb_latexmk
 paper/*.synctex.gz
-paper/main.pdf
