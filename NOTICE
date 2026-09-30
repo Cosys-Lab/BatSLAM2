@@ -1,0 +1,12 @@
+BatSLAM 2.0
+Copyright 2026 Cosys-Lab
+
+This product includes software developed by Cosys-Lab:
+BatSLAM 2.0, sonar-only SLAM for a robot with a bio-inspired binaural sonar
+(https://github.com/Cosys-Lab/BatSLAM2).
+
+If you use this software, or results obtained with it, in academic work, please cite the
+BatSLAM 2.0 paper (IEEE Transactions on Robotics, submitted 2026). See CITATION.cff.
+
+The head-related transfer function of Phyllostomus discolor in sim/simulator/data/ is from
+De Mey et al. (2008).

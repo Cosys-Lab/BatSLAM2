@@ -151,7 +151,7 @@ the real-world experiment).
 
 ## Citation
 
-If you use this code, please cite:
+If you use this code, or results obtained with it, please cite the paper:
 
 ```bibtex
 @article{batslam2,
@@ -163,9 +163,14 @@ If you use this code, please cite:
 }
 ```
 
+GitHub's "Cite this repository" button (from [CITATION.cff](CITATION.cff)) gives the reference to the code
+itself.
+
 ## License
 
-TODO: add the license.
+BatSLAM 2.0 is released under the [Apache License 2.0](LICENSE), © 2026 Cosys-Lab. You are free to use,
+modify and redistribute it, also commercially. When you redistribute it or a derivative of it, the
+license asks you to include the [NOTICE](NOTICE) file and to mark the files you changed.
 
 The head-related transfer function of *Phyllostomus discolor* in `sim/simulator/data/` is from
 De Mey et al. (2008).

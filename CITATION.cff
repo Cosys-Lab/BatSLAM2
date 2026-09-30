@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "BatSLAM 2.0: sonar-only SLAM for a robot with a bio-inspired binaural sonar"
+authors:
+  # TODO: add the co-authors of the paper
+  - family-names: Steckel
+    given-names: Jan
+    affiliation: Cosys-Lab
+repository-code: "https://github.com/Cosys-Lab/BatSLAM2"
+license: Apache-2.0
+date-released: 2026-09-30
+keywords:
+  - SLAM
+  - sonar
+  - echolocation
+  - bio-inspired robotics
+  - place recognition
