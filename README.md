@@ -20,6 +20,7 @@ odometry alone.*
 
 **Paper:** [2026 - Steckel - BatSLAM2.pdf](paper/2026%20-%20Steckel%20-%20BatSLAM2.pdf) (submitted to IEEE
 Transactions on Robotics).
+
 **Video:** [a 3.5-minute overview](docs/BatSLAM2_overview.mp4) explains the method and shows a mapping run
 in simulation and on a real recording.
 
