@@ -1,0 +1,21 @@
+\begin{tabular}{llrrrrrrrr}
+\toprule
+Case & Bias & ATE odo & ATE & Aligned & Precision & Wrong (final) & Wrong (all) & Coverage & Collapsed \\
+ & & [m] $\downarrow$ & [m] $\downarrow$ & [m] $\downarrow$ & $\uparrow$ & $\downarrow$ & $\downarrow$ & $\uparrow$ & [\%] $\downarrow$ \\
+\midrule
+Indoor, route 3, seed 4 & $b = 0$ & 8.0 & \textbf{1.22} & 0.30 & 1.000 & 0/38 & 1 & 0.82 & 0.0 \\
+Indoor, route 3, seed 5 & $b = 0$ & 7.6 & \textbf{0.34} & 0.20 & 0.999 & 0/40 & 1 & 0.83 & 0.0 \\
+Indoor, route 3, seed 4 & $b = 0.25$ & 15.9 & \textbf{1.98} & 0.33 & 0.999 & 0/38 & 1 & 0.83 & 0.0 \\
+Indoor, route 3, seed 5 & $b = 0.25$ & 20.7 & \textbf{0.45} & 0.24 & 0.999 & 0/37 & 2 & 0.83 & 0.0 \\
+Indoor, route 3, sensor $-20$~dB & $b = 0.25$ & 11.0 & \textbf{1.98} & 1.43 & 0.988 & 1/33 & 3 & 0.65 & 0.2 \\
+Indoor, route 3, sensor $-10$~dB & $b = 0.25$ & 11.0 & \textbf{0.94} & 0.28 & 1.000 & 0/37 & 2 & 0.76 & 0.0 \\
+Indoor, route 3, seed 1, odometry noise $\times 3$ & $b = 0.25$ & 11.7 & \textbf{2.37} & 0.48 & 1.000 & 0/50 & 1 & 0.81 & 0.0 \\
+Indoor, route 3, original sensor & $b = 0.25$ & 11.0 & \textbf{1.48} & 0.28 & 0.998 & 0/38 & 2 & 0.73 & 0.0 \\
+Indoor, route 3, seed 4 & $b = 0.5$ & 20.3 & \textbf{1.36} & 0.40 & 1.000 & 0/38 & 1 & 0.82 & 0.0 \\
+Indoor, route 3, seed 5 & $b = 0.5$ & 22.9 & \textbf{0.75} & 0.30 & 1.000 & 0/40 & 1 & 0.82 & 0.0 \\
+Indoor, route 3, seed 4 & $b = 1$ & 20.1 & \textbf{1.60} & 0.48 & 1.000 & 0/40 & 1 & 0.83 & 0.0 \\
+Indoor, route 3, seed 5 & $b = 1$ & 20.3 & \textbf{14.54} & 2.87 & 1.000 & 0/32 & 1 & 0.62 & 0.8 \\
+Indoor, route 3, seed 4 & $b = 2$ & 33.5 & \textbf{19.08} & 18.17 & 1.000 & 0/23 & 0 & 0.41 & 4.8 \\
+Indoor, route 3, seed 5 & $b = 2$ & 35.7 & \textbf{20.47} & 19.71 & 1.000 & 0/11 & 0 & 0.32 & 7.4 \\
+\bottomrule
+\end{tabular}

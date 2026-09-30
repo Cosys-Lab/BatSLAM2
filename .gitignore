@@ -14,3 +14,14 @@ __pycache__/
 
 # MATLAB
 *.asv
+
+# LaTeX build output (the PDF is added separately in its final version)
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.fls
+paper/*.fdb_latexmk
+paper/*.synctex.gz
+paper/main.pdf

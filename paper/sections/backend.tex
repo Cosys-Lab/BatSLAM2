@@ -1,0 +1,25 @@
+\section{The robust pose graph}
+\label{sec:backend}
+In this section, we describe how odometry and verified recognitions are fused into a one consistent topological map. In contrast to the pose cells and experience map of the original BatSLAM, a pose graph gives a principled estimate of every pose and its uncertainty, and it allows loop closures to be added and removed at any time, as was described in the previous section. In this section, we will detail the exact implementation of the pose graph subsystem with the GTSAM backend framework.
+
+\subsection{Formulation}
+Every pulse $i$ adds a node with the pose $x_i = (x, y, \theta)$ of the robot, connected to the previous node by the odometry increment $u_i$. A committed recognition adds a link between a query node $q$ and the anchor $a$ of the matched template, with the measurement $z_{qa} = (d^*, 0, 0)$. The map is then the solution of:
+\begin{equation}
+\begin{aligned}
+\hat{X} = \arg\min_{X} \; & \sum_{i} \big\| \Delta(x_{i-1}, x_i) - u_i \big\|^2_{\Sigma_{o,i}} \\
++ & \sum_{(q,a) \in \mathcal{L}} \rho_H\Big( \big\| \Delta(x_q, x_a) - z_{qa} \big\|_{\Sigma_\ell} \Big),
+\end{aligned}
+\label{eq:map}
+\end{equation}
+%
+where $\Delta(x_a, x_b)$ is the pose of node $b$ in the frame of node $a$, $\|\cdot\|_\Sigma$ is the Mahalanobis norm, $\mathcal{L}$ is the set of loop closure links currently in the graph, and $\rho_H$ is the Huber loss. The odometry uncertainty $\Sigma_{o,i}$ grows with the square root of the distance travelled (appendix \ref{app:params}). The links are deliberately weak ($\sigma = \SI{0.30}{\meter}$ in position and \SI{0.20}{\radian} in heading), so that a single link can only nudge the map, whereas only a verified sequence of links (originating from the sequence verifier) closes a loop. We solve equation \ref{eq:map} incrementally with iSAM2 \cite{kaessISAM2IncrementalSmoothing2012} in GTSAM \cite{dellaertFactorGraphsGTSAM2012}, using Dogleg steps, as Gauss-Newton steps diverged in our system when many conflicting links were present.
+
+\subsection{Link management}
+To maximally build safeguards into the system against map collapses, we assume that even a well-verified recognition can still be wrong. Therefore, we included a system to allow the pose graph to be able to forget these erroneous links. We therefore keep the links of every committed hypothesis together as a \emph{link group}, which enters the graph as tentative, and can be removed from iSAM2 and re-admitted later. Three rules act on these groups:
+\begin{itemize}
+\item \textbf{Length rule:} a group whose hypothesis ends with fewer than 16 links is withdrawn permanently. This rule targets the same brief aliases as the risk-scaled commit, but for hypotheses with a small implied correction.
+\item \textbf{Residual check:} after every injection of links, the tentative group with the worst median Mahalanobis residual is removed if that median exceeds 12.
+\item \textbf{GNC audit:} every 400 nodes, we solve equation \ref{eq:map} in batch with Graduated Non-Convexity (GNC) \cite{yangGraduatedNonConvexityRobust2020}, over the odometry and the links of \emph{all} groups, including withdrawn ones. A group is kept (or re-admitted) when the mean GNC weight of its links is at least 0.5, and a group that survives two audits is confirmed.
+\end{itemize}
+The first two rules judge every group by itself, whereas the GNC audit operates globally on the graph, judging all groups jointly, similar to the RRR method \cite{latifRobustLoopClosing2013} or the switchable constraints \cite{sunderhaufSwitchableConstraintsRobust2012}, but per group rather than per link. As we will show in section \ref{sec:resultsAblation}, the audit actually never changed a final map in our experiments, making it largely reduntant at this point. However, we opted to keep this mechanism present as a safeguard for more strongly aliased environments.
+

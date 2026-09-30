@@ -1,0 +1,49 @@
+\section{Parameters}
+\label{app:params}
+Table \ref{tab:params} lists all parameters of BatSLAM 2.0. They are the default values of \texttt{batslam/config.py} in the accompanying code, and were used for all worlds, routes and sensors; none of them was tuned per test case.
+
+\begin{table*}[t]
+\centering
+\footnotesize
+\caption{Parameters of BatSLAM 2.0. The same values were used for every experiment in this paper.}
+\label{tab:params}
+\resizebox{\textwidth}{!}{\begin{tabular}{lll}
+\toprule
+Stage & Parameter & Value \\
+\midrule
+Front-end & Filterbank & 64 Gaussian bands, \SIrange{30}{90}{\kilo\hertz}, log-spaced, width of two band spacings \\
+ & Band pooling & Pairs of bands (32 bands) \\
+ & Range bins & \SI{6}{\centi\meter}, from \SI{0.25}{\meter} to \SI{10}{\meter} (162 bins) \\
+ & Time-varying gain & Amplitude $\times r$ \\
+ & Energy image & Cube root of the amplitude, relative to the peak of the view \\
+ & Spectral-shape image & $\pm$\SI{15}{\deci\bel} scaled to $\pm 1$, only above \SI{-40}{\deci\bel} \\
+ & Range smoothing & Gaussian, one bin (\SI{6}{\centi\meter}) \\
+Templates & Spacing & \SI{0.45}{\meter} travelled or \SI{20}{\degree} turned \\
+ & Range-shift search & $\pm 3$ bins ($\pm$\SI{18}{\centi\meter}) \\
+ & Candidates & 5 per pulse, similarity $\ge \Smin$ \\
+ & Exclusion of recent templates & \SI{6}{\meter} of travel \\
+ & Heading gate & \SI{69}{\degree} (\SI{1.2}{\radian}) \\
+Verifier & Evidence per match & $\LLRslope \cdot (s - \LLRmid)$, clipped to $\pm 4$ \\
+ & Missed pulse & Penalty 0.5, dies after 4 missed pulses \\
+ & Consistency & \SI{0.30}{\meter} $+ 0.15 \times$ distance, \SI{0.25}{\radian} \\
+ & Commit & 8 pairs, 3 templates, evidence 10, margin 4 over rivals ($>$\SI{1}{\meter} or $>$\SI{0.4}{\radian} apart) \\
+ & Plausibility gate & $\chi^2_3$ at 99.9\,\% (16.27); relative covariance for corrections $>$\SI{1.5}{\meter} \\
+ & Risk-scaled commit & Correction $>$\SI{1.5}{\meter}: 16 pairs, evidence 40, evidence $\ge$ number of pairs \\
+Pose graph & Prior & $\sigma = (0.01, 0.01, 0.005)$ \\
+ & Odometry & $\sigma = (0.04, 0.02, 0.035) \cdot \sqrt{d} + (0.005, 0.005, 0.003)$ \\
+ & Loop closure link & $\sigma = (0.30, 0.30, 0.20)$, Huber loss with threshold 1.345 \\
+ & Solver & iSAM2, Dogleg, relinearization threshold 0.01 \\
+Link management & Length rule & Fewer than 16 links after 10 pulses without a new link \\
+ & Residual check & Median $\chi^2 > 12$ (tentative groups) \\
+ & GNC audit & Every 400 nodes, Geman-McClure loss, keep if mean weight $\ge 0.5$ \\
+\bottomrule
+\end{tabular}}
+\end{table*}
+
+\section{Reproducibility}
+\label{app:repro}
+All code, scene definitions and experiment definitions are available at \url{https://github.com/Cosys-Lab/BatSLAM2}. The simulator (section \ref{sec:setup}) is included as a copy under \texttt{sim/simulator}. An important note concerns the HRTF data: the HRTF file that we started from stores its directivity arrays in (elevation, azimuth, frequency) order, while the interpolation routine of the simulator assumed (azimuth, elevation, frequency). As both angle grids are identical ($-$\SI{90}{\degree} to \SI{90}{\degree} in steps of \SI{2.5}{\degree}), this went unnoticed at first, and it caused the simulated ears to point up and down instead of left and right (a reflector \SI{45}{\degree} to the side produced an interaural level difference of only \SI{0.2}{\deci\bel}, and a reflector \SI{30}{\degree} above the head one of \SI{14}{\deci\bel}). All results in this paper were produced with the corrected (transposed) HRTF, for which the same test gives \SI{18}{\deci\bel} and \SI{0}{\deci\bel}, respectively. The check is included as \texttt{sim/check\_hrtf\_orientation.m}.
+
+The datasets are generated with \texttt{sim/generate\_dataset.m} (worlds, drives, echoes and odometry) and \texttt{sim/generate\_capture\_dataset.m} (the capture study). The experiments are defined in \texttt{suites/hc\_main.json}, \texttt{suites/hc\_ablation.json} and \texttt{suites/hc\_robustness.json}, and are run with \texttt{scripts/run\_suite.py}. The front-end studies are run with \texttt{scripts/bench\_descriptor.py}, \texttt{scripts/bench\_sensor.py} and \texttt{scripts/capture\_analysis.py}. All numbers and tables in this paper are generated from the results by \texttt{scripts/build\_paper\_generated.py}, and all figures by \texttt{scripts/paper\_figures.py}.
+
+\input{sections/appendix_runs}

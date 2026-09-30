@@ -1,0 +1,83 @@
+\section{Recognizing places}
+\label{sec:recognition}
+In this section, we describe how BatSLAM 2.0 recognizes a place that the robot has visited before. We first describe the local view templates in more detail and how they are compared with the stored local view templates. After this description, we introduce the sequence verifier which turns individual, ambiguous matches into verified loop closures.
+
+\subsection{Pose-anchored local view templates}
+\label{sec:templates}
+A local view template is a local view $V_t$ that is stored together with the index of the pose-graph node at which it was recorded (its \emph{anchor}). The pose of a template is therefore always the current estimate $(x, y, \theta)$ of its anchor node, and it moves with every optimization of the full pose graph. As sonar views are strongly direction dependent (section \ref{sec:resultsCapture}), the heading needs to be part of the template's pose. A new template is laid whenever the robot has traveled \SI{0.45}{\meter} or turned \SI{20}{\degree} since the previous one, to overcome the buildup of templates/poses that are all geometrically located at the same place.
+
+\textbf{Similarity:} We compare the current local view $V_q$ with a template $V_t$ using the correlation coefficient $\rho$, as in our earlier work on RadarSLAM \cite{schoutenBiomimeticRadarSystem2019}, as we found that this was a more robust metric compared to the euclidean distance in the original BatSLAM work. As a revisit never passes through exactly the same position, we shift the range axis of $V_q$ by up to three range bins (\SI{\pm 18}{\centi\meter}) during comparison, and keep the best match:
+\begin{equation}
+s(q,t) = \max_{|\delta| \le 3} \rho\big( V_q^{(\delta)}, V_t \big),
+\label{eq:similarity}
+\end{equation}
+%
+with $s(q,t)$ the similarity between a query $q$ (the current pulse) and a template $t$, and $V_q^{(\delta)}$ the local view of the query, shifted by $\delta$ range bins$s(q,t)$. The winning shift $\delta^*$ also indicates where the robot is with respect to the anchor, and we use it as a forward offset $d^* = \delta^* \cdot \SI{6}{\centi\meter}$ in the loop closure links.
+
+\textbf{Candidates:} For every pulse, the five most similar templates become candidates, provided that $s(q,t) \ge \Smin$, that the template was laid more than \SI{6}{\meter} of travel earlier, and that the headings of the robot and the anchor differ by less than \SI{69}{\degree}. No position gate is applied, i.e., the search over the templates is global.
+
+\subsection{The sequence verifier}
+\label{sec:verifier}
+A single match in the sonar data is never trusted, as sonar data can be highly ambiguous. Instead, we keep a set of \emph{recognition hypotheses}, and each of these hypotheses claims that the stretch of path that is being driven now was driven before. A hypothesis $h$ is a chain of $n$ pairs $(q_i, t_i)$ of query nodes and templates, in which every pair states that the anchor of $t_i$ lies $d^*$ in front of $q_i$, with the same heading.
+
+\textbf{Geometric consistency:} A new pair can only extend a hypothesis if the motion between the queries agrees with the motion between the anchors. For two pairs $a$ and $b$, let $\Delta p_q$ and $\Delta\theta_q$ be the displacement and heading change between both queries according to odometry, and $\Delta p_t$ and $\Delta\theta_t$ the same quantities between both anchors according to the map. Pair $b$ is consistent with pair $a$ when:
+\begin{equation}
+\begin{aligned}
+\| \Delta p_t - \Delta p_q \| &< \SI{0.30}{\meter} + 0.15 \cdot \| \Delta p_q \|, \\
+|\Delta\theta_t - \Delta\theta_q| &< \SI{0.25}{\radian},
+\end{aligned}
+\label{eq:consistency}
+\end{equation}
+%
+in which the position tolerance grows with the distance traveled, as the position error of odometry is unbounded and grows with every meter driven, both directly and through the accumulated heading error. The heading error, in contrast, stays well below \SI{0.25}{\radian} over the length of a hypothesis (a few meters), so that a fixed heading tolerance suffices. We test every new pair against both the last and the first pair of the hypothesis. Every pulse, each hypothesis is extended with its best consistent candidate, and every unused candidate seeds a new hypothesis. Several contradicting hypotheses can therefore be alive at the same time, and this set of hypotheses represents the ambiguity.
+
+\textbf{Evidence:} Every hypothesis accumulates evidence as a sum of log-likelihood ratios of its similarities, minus a penalty for every pulse without a consistent candidate:
+\begin{equation}
+\Lambda(h) = \sum_{i=1}^{n} \ell\big(s(q_i, t_i)\big) - 0.5 \cdot m,
+\label{eq:evidence}
+\end{equation}
+%
+with $m$ the number of missed pulses. The term $\ell(s)$ is the evidence that a single pair with similarity $s$ provides for a true revisit. Ideally, it is the log-likelihood ratio, which by Bayes' rule equals the posterior minus the prior log-odds of a correct candidate:
+\begin{equation}
+\begin{aligned}
+\ell(s) &= \ln \frac{p(s \mid \text{correct})}{p(s \mid \text{wrong})} \\
+&= \operatorname{logit} P(\text{correct} \mid s) - \operatorname{logit} P(\text{correct}),
+\end{aligned}
+\label{eq:llr}
+\end{equation}
+%
+with $p(s \mid \text{correct})$ and $p(s \mid \text{wrong})$ the distributions of the similarity of candidates whose anchor does and does not lie at the current place of the robot (within \SI{0.6}{\meter} and \SI{26}{\degree} according to ground truth), and $P(\text{correct})$ the fraction of correct candidates. A positive $\ell$ therefore favors a revisit, and a negative $\ell$ favors a different place. We fitted $P(\text{correct} \mid s)$ once, with a logistic regression $\operatorname{logit} P(\text{correct} \mid s) = a \cdot s + b$ on the labeled candidates of the development drive. The log-likelihood ratio is then linear in $s$, and we refer to it, clipped, as the \emph{evidence curve}:
+\begin{equation}
+\ell(s) = \min\Big(4, \max\big(-4,\ \LLRslope \cdot (s - \LLRmid)\big)\Big).
+\label{eq:evidenceCurve}
+\end{equation}
+%
+Here, the slope \LLRslope{} is the fitted $a$, i.e., the evidence gained per unit of similarity, and \LLRmid{} $= (\operatorname{logit} P(\text{correct}) - b)/a$ is the similarity at which a candidate is as likely to be correct as any other candidate, so that it carries no evidence ($\ell = 0$). The clipping to $[-4, 4]$, reached at $s = \LLRmid \pm 4/\LLRslope$, prevents a single exceptionally good or bad match from dominating a hypothesis, as the linear model extrapolates without bound into the tails, where few candidates exist. A hypothesis dies after four consecutive missed pulses.
+
+\textbf{Commit rule:} A hypothesis is committed (i.e., turned into loop closure links) when it has at least 8 pairs on at least 3 templates, an evidence $\Lambda \ge 10$, and a margin of at least 4 over the best rival hypothesis that places the robot elsewhere (more than \SI{1}{\meter} or \SI{0.4}{\radian} away). Furthermore, the correction it implies for the map must be plausible, which is estimated by a plausibility gate.
+
+\textbf{Plausibility gate:} A hypothesis can be consistent and still be wrong, e.g., when a corridor has the same structure as another corridor a few meters away. Committing such an alias would force a jump of the current pose that is much larger than the drift the odometry could have accumulated. We therefore test whether the correction implied by a hypothesis can be explained by the uncertainty of the current pose estimate. From its last pair, the hypothesis predicts the current pose $x_h$, which we compare with the current estimate $\hat{x}$ of the pose graph through their Mahalanobis distance:
+\begin{equation}
+d(h) = (x_h - \hat{x})^T \cdot \Sigma^{-1} \cdot (x_h - \hat{x}) \le 16.27,
+\label{eq:plausibility}
+\end{equation}
+%
+where $\Sigma$ describes how far $x_h$ and $\hat{x}$ may disagree when the hypothesis is correct. Two independent errors contribute: the drift of the estimate $\hat{x}$, given by its covariance in the pose graph, and the error of $x_h$, which stems from a single sonar match and therefore has the covariance of one loop closure link. As both errors are independent, their covariances add. For a correct hypothesis, $d(h)$ then follows a $\chi^2$ distribution with three degrees of freedom ($x$, $y$, $\theta$), and 16.27 is its 99.9th percentile: a larger $d(h)$ means that the jump cannot be explained by drift and match error, and the hypothesis is rejected. For small corrections, we use the marginal covariance of the current node, which iSAM2 provides cheaply. This marginal, however, includes the drift that the current node shares with the anchor. For corrections larger than \SI{1.5}{\meter}, we therefore use the covariance of the relative pose between the anchor and the current node, obtained from their joint marginal. Once loops have been closed, this relative covariance is much smaller, and corrections of several meters become implausible.
+
+\textbf{Risk-scaled commit:} The damage of a wrong commit grows with the correction it forces on the map. When the implied correction exceeds \SI{1.5}{\meter}, we therefore require at least 16 pairs (about \SI{2.4}{\meter} of travel), an evidence $\Lambda \ge 40$ and a mean evidence of at least one per pair ($\Lambda \ge n$). Brief aliases die before they reach this length and strength, and the last condition stops the rare persistent alias along quasi-periodic structures (such as a lane between two rows of pillars), which stays consistent for many meters but matches only weakly (section \ref{sec:resultsAblation}).
+
+\textbf{Lock-on:} Once a hypothesis is committed, all its pairs are released at once as loop closure links, which enter the pose graph as one link group (section \ref{sec:backend}). Rival hypotheses that agree with it are discarded, as they describe the same revisit. The committed hypothesis itself stays alive, and the verifier keeps extending it with the same consistency test (equation \ref{eq:consistency}). Every new pair is released immediately as an additional link of the same group, without passing the commit rule again: the pair continues a chain that has already been verified, and its consistency with both the first and the last pair ties it to that chain. At every pulse at which a committed hypothesis is extended, we say that the robot is \emph{locked on} to a known stretch of path. Lock-on thus produces a dense sequence of links along the whole revisit, rather than a single burst at the moment of commitment, so that the drift is corrected along the entire revisited stretch. While locked on, no new templates are laid, as the robot drives through a place that is already represented by templates, and new templates of the same place would only compete with the existing ones as candidates at later revisits. Lock-on ends when the committed hypothesis dies, i.e., when the robot leaves the known path and no longer finds consistent candidates, or when the link management of the back-end withdraws its link group (section \ref{sec:backend}). From then on, templates are laid again. The complete processing of a pulse is summarized in algorithm \ref{alg:pulse}.
+
+\begin{algorithm}[t]
+\caption{Processing of one pulse in BatSLAM 2.0.}
+\label{alg:pulse}
+\small
+\begin{algorithmic}[1]
+\State Add a node with odometry to the pose graph
+\State Compute the local view from the echo \Comment{Section \ref{sec:frontend}}
+\State Update the recognition hypotheses \Comment{Section \ref{sec:verifier}}
+\State Commit a strong, unambiguous and plausible hypothesis
+\State Release its links and manage link groups \Comment{Section \ref{sec:backend}}
+\State Lay a new template, unless locked on
+\end{algorithmic}
+\end{algorithm}

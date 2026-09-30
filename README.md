@@ -150,6 +150,7 @@ the real-world experiment).
 | `experiments/` | The experiment definitions of the paper |
 | `scripts/` | Command-line tools to run one dataset or a whole experiment |
 | `tests/` | Unit tests of the building blocks |
+| `paper/` | LaTeX source of the paper |
 | `data/` | Datasets (generated, not in the repository) |
 
 ## Citation

@@ -1,0 +1,23 @@
+\begin{tabular}{lrrrrrr}
+\toprule
+Variant & ATE [m] $\downarrow$ & Max ATE [m] $\downarrow$ & Precision $\uparrow$ & Wrong (final) $\downarrow$ & Wrong (all) $\downarrow$ & Coverage $\uparrow$ \\
+\midrule
+Naive (single views, no gates, no link mgmt.) & 18.90 & 32.68 & 0.930 & 364/2115 & 364/2115 & 0.72 \\
+No sequence verification (single views) & 4.85 & 8.17 & 0.995 & 10/1577 & 215/2575 & 0.80 \\
+Original front-end (8 wide bands) & 1.54 & 3.15 & 1.000 & 0/137 & 3/158 & 0.73 \\
+No time-varying gain & 2.53 & 6.82 & 0.989 & 3/136 & 19/175 & 0.72 \\
+Energy image only (no shape) & 1.38 & 1.92 & 0.967 & 8/158 & 21/194 & 0.74 \\
+No range-shift search & 1.47 & 3.28 & 0.997 & 0/124 & 0/143 & 0.60 \\
+No risk-scaled commit & 0.93 & 1.79 & 0.992 & 1/154 & 2/173 & 0.81 \\
+Risk-scaled commit, length only (24 pairs) & 1.20 & 2.98 & 0.998 & 0/151 & 0/168 & 0.81 \\
+Risk-scaled commit, length only (16 pairs) & 0.89 & 1.78 & 0.993 & 1/154 & 1/170 & 0.81 \\
+No length rule & 0.55 & 0.63 & 0.998 & 0/169 & 0/169 & 0.82 \\
+No link management & 0.55 & 0.63 & 0.998 & 0/169 & 0/169 & 0.82 \\
+No plausibility gate & 0.87 & 1.65 & 0.998 & 0/150 & 0/168 & 0.81 \\
+Plausibility gate on the absolute marginal & 0.87 & 1.65 & 0.998 & 0/150 & 0/168 & 0.81 \\
+No heading gate & 0.78 & 1.55 & 0.999 & 0/145 & 0/165 & 0.80 \\
+Hand-set evidence constants & 1.51 & 3.29 & 0.999 & 0/124 & 0/126 & 0.68 \\
+\midrule
+\textbf{Full system (ours)} & 0.87 & 1.65 & 0.998 & 0/150 & 0/168 & 0.81 \\
+\bottomrule
+\end{tabular}

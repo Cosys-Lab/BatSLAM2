@@ -1,0 +1,137 @@
+\section{Result tables}
+\label{app:tables}
+This appendix lists the numerical results that are discussed in the main text: single-view place recognition for the design choices of the descriptor (table \ref{tab:descriptor}), the results of the complete system per condition (table \ref{tab:main}), the ablations (table \ref{tab:ablation}) and the real-world results (table \ref{tab:real}).
+
+\begin{table}[t]
+\centering
+\footnotesize
+\caption{Single-view place recognition for the design choices of the descriptor, with the design sensor. All variants use 32 channels, \SI{6}{\centi\meter} range bins and the TVG. Our descriptor uses a cube-root compression. Best value per column in bold. ILD: interaural level difference.}
+\label{tab:descriptor}
+\begin{tabular}{lrrrr}
+\toprule
+ & \multicolumn{2}{c}{Indoor floor} & \multicolumn{2}{c}{City} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Variant & Top-1 & AUC & Top-1 & AUC \\
+\midrule
+\multicolumn{5}{l}{\textit{Cues}} \\
+Energy & 0.875 & 0.915 & 0.878 & 0.918 \\
+Energy + shape \textbf{(ours)} & 0.913 & 0.945 & 0.888 & 0.938 \\
+Energy + shape + ILD & 0.892 & \textbf{0.968} & 0.878 & \textbf{0.960} \\
+\midrule
+\multicolumn{5}{l}{\textit{Compression of the energy image (energy + shape)}} \\
+Logarithm, floor \SI{-30}{\deci\bel} & 0.884 & 0.930 & 0.888 & 0.930 \\
+Logarithm, floor \SI{-50}{\deci\bel} & \textbf{0.929} & 0.947 & 0.886 & 0.925 \\
+Square root & 0.900 & 0.940 & \textbf{0.889} & 0.937 \\
+Linear & 0.858 & 0.925 & 0.857 & 0.921 \\
+\midrule
+\multicolumn{5}{l}{\textit{Matching of the original BatSLAM}} \\
+Logarithmic energy, floor \SI{-30}{\deci\bel} & 0.401 & 0.801 & 0.599 & 0.814 \\
+Energy + shape & 0.793 & 0.901 & 0.802 & 0.889 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\footnotesize
+\caption{Results of BatSLAM 2.0 per condition (ranges over the runs). ATE: trajectory error of odometry and of BatSLAM 2.0, without and after rigid alignment; wrong: wrong committed hypotheses in the final graph, out of all committed hypotheses; coverage: fraction of true revisits with a correct link.}
+\label{tab:main}
+\begin{tabular}{lrrrrr}
+\toprule
+ & \multicolumn{3}{c}{ATE [m]} & & \\
+\cmidrule(lr){2-4}
+Condition (runs) & Odometry & Ours & Aligned & Wrong & Coverage \\
+\midrule
+Calibrated (6) & 4.2--11.1 & 0.47--1.91 & 0.18--0.46 & 0/230 & 0.79--0.84 \\
+Residual bias (6) & 11.0--19.0 & 0.62--1.65 & 0.23--0.53 & 0/227 & 0.79--0.84 \\
+Degraded sensors (3) & 7.5 & 0.52--1.79 & 0.25--0.81 & 1/106 & 0.67--0.74 \\
+Uncalibrated (4) & 19.1--22.3 & 1.38--12.68 & 0.45--2.96 & 0/149 & 0.62--0.81 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\footnotesize
+\caption{Ablations over four standard cases (routes 3 and 5 with calibrated odometry, route 7 with a residual bias, and the city). ATE: mean over the cases; wrong: wrong committed hypotheses in the final graphs, summed over the cases. Naive: no sequence verification and no link management.}
+\label{tab:ablation}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lrrr}
+\toprule
+Variant & ATE [m] & Wrong & Coverage \\
+\midrule
+\textbf{Full system (ours)} & 0.87 & 0 & 0.81 \\
+\midrule
+Naive & 18.90 & 364 & 0.72 \\
+No sequence verification & 4.85 & 10 & 0.80 \\
+\midrule
+Original front-end (8 bands) & 1.54 & 0 & 0.73 \\
+No time-varying gain & 2.53 & 3 & 0.72 \\
+Energy image only & 1.38 & 8 & 0.74 \\
+No range-shift search & 1.47 & 0 & 0.60 \\
+Hand-set evidence constants & 1.51 & 0 & 0.68 \\
+\midrule
+No risk-scaled commit & 0.93 & 1 & 0.81 \\
+Length only (24 pairs) & 1.20 & 0 & 0.81 \\
+No link management & 0.55 & 0 & 0.82 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table*}[t]
+\centering
+\caption{Real-world results, mean (standard deviation) over ten odometry seeds (distance $\times 0.95$, rotation $\times 1.10$).}
+\label{tab:real}
+\input{generated/tab_real}
+\end{table*}
+
+\clearpage
+\section{Additional results}
+\label{app:runs}
+In this appendix, we show the trajectories and the detailed results of all runs of the main and robustness experiments, and of the ablations. In every map, the grey line is the ground truth, the orange line the dead-reckoning estimate, and the blue line the trajectory estimated by BatSLAM 2.0 (without alignment, as it was estimated online). Links of wrong committed hypotheses that remain in the final graph would be drawn in red. The title of every panel lists the trajectory error of BatSLAM 2.0 and of odometry, and the number of wrong committed hypotheses in the final graph.
+
+\begin{figure*}[p]
+\centering
+\includegraphics[width=\linewidth]{figures/appendixMaps_hc_main.pdf}
+\caption{Trajectories of all runs of the main experiment (table \ref{tab:mainRuns}), sorted by the odometry condition. Grey: ground truth; orange: odometry; blue: BatSLAM 2.0. Run names: \texttt{r3}, \texttt{r5}, \texttt{r7}: routes 3, 5 and 7 on the indoor floor; \texttt{city}: the city world; \texttt{b0}, \texttt{b025}, \texttt{b1}: bias factor $b = 0$, $0.25$ and $1$; \texttt{s1}--\texttt{s3}: odometry noise realization; \texttt{noise5e-6}, \texttt{noise1.5e-5}, \texttt{oldsensor}: degraded sensors.}
+\label{fig:appendixMaps}
+\end{figure*}
+
+\begin{figure*}[p]
+\centering
+\includegraphics[width=\linewidth]{figures/appendixMaps_hc_robustness.pdf}
+\caption{Trajectories of all runs of the robustness experiment (table \ref{tab:robustness}). \texttt{bias}$b$\texttt{\_s}$k$: bias factor $b$ with odometry realization $k$; \texttt{odomnoise\_x3}: three times the random odometry noise; the last three runs use degraded sensors with a residual bias. Colors as in figure \ref{fig:appendixMaps}.}
+\label{fig:appendixMapsRobust}
+\end{figure*}
+
+\begin{table*}[htbp]
+\centering
+\footnotesize
+\caption{Results of BatSLAM 2.0 on all runs of the main experiment (drives of about \SI{1}{\kilo\meter}). ATE odo: dead reckoning; ATE and aligned: BatSLAM 2.0 without and after rigid alignment; precision: fraction of correct links; wrong (final / all): wrong committed hypotheses in the final graph and over all commits; coverage: fraction of true revisits with a correct link; collapsed: fraction of collapsed pairs.}
+\label{tab:mainRuns}
+\resizebox{\linewidth}{!}{\input{generated/tab_main}}
+\end{table*}
+
+\begin{table*}[htbp]
+\centering
+\footnotesize
+\caption{Robustness runs: odometry bias factor $b$, three times the random odometry noise, and degraded sensors with a residual bias. Columns as in table \ref{tab:mainRuns}.}
+\label{tab:robustness}
+\resizebox{\linewidth}{!}{\input{generated/tab_robustness}}
+\end{table*}
+
+\begin{table*}[htbp]
+\centering
+\footnotesize
+\caption{Ablation of the safeguards on the four hardest cases (three degraded sensors and route 3 with odometry seed 3). Every cell lists the aligned trajectory error (m) and, in parentheses, the number of wrong hypotheses in the final graph; the last two columns sum the wrong hypotheses in the final graphs and over all commits.}
+\label{tab:ablationHard}
+\resizebox{\linewidth}{!}{\input{generated/tab_ablation_hard}}
+\end{table*}
+
+\begin{table*}[htbp]
+\centering
+\footnotesize
+\caption{Ablations per case: trajectory error (ATE, in m) and the number of wrong committed hypotheses in the final graph (in parentheses), for route 3 and route 5 with calibrated odometry, route 7 with a residual bias, and the city with calibrated odometry.}
+\label{tab:ablationCases}
+\input{generated/tab_ablation_cases}
+\end{table*}

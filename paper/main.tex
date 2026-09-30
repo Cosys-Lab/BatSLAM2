@@ -1,0 +1,214 @@
+\documentclass[journal]{IEEEtran}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit,calc,backgrounds}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{cite}
+\usepackage{microtype}
+\usepackage{multirow}
+\usepackage[hidelinks]{hyperref}
+
+\newcommand{\vect}[1]{\bm{#1}}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.6}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.75}
+\renewcommand{\dbltopfraction}{0.9}
+\renewcommand{\dblfloatpagefraction}{0.75}
+\setcounter{totalnumber}{5}
+\setcounter{topnumber}{3}
+\setcounter{dbltopnumber}{3}
+\raggedbottom
+\input{generated/numbers}
+\input{generated/real_numbers}
+
+\title{BatSLAM 2.0: Sequence-Verified Sonar Place Recognition in a Robust Pose Graph}
+\author{Jan~Steckel%
+\thanks{J. Steckel is with Cosys-Lab, Faculty of Applied Engineering, University of Antwerp, 2020 Antwerp, Belgium, and also with Flanders Make Strategic Research Centre, 3920 Lommel, Belgium (e-mail: jan.steckel@uantwerpen.be).}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Echolocating bats can navigate dark and cluttered spaces using echolocation. Over a decade ago, BatSLAM showed that a robot with a biomimetic binaural sonar can build a topological map of the environment, by recognizing places from the received acoustic signals. Sonar place recognition, however, is ambiguous by nature: corridors produce nearly identical echo trains, and wrong loop closure can collapse the topological map. In this paper, we introduce BatSLAM 2.0, a novel sonar-only SLAM system built from three elements: an updated acoustic front-end, a sequence verifier that tracks and verifies loop closure candidates and a pose graph implemented on a high performance factor graph framework. The system was thoroughly evaluated both in simulated as well as real world recordings. In both cases, the BatSLAM2.0 algorithm shows the capability of robust topological map creation, countering map collapse, and robust scaling of map size.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Sonar, biomimetics, SLAM, place recognition, loop closure, pose graph.
+\end{IEEEkeywords}
+
+\section{Introduction}
+Bats are the prime example of an animal that navigates using sound alone. Indeed, echolocating bats find their way through caves, forests and buildings using the echoes of their own calls, often in complete darkness and at high speeds \cite{griffinListeningDarkAcoustic1958, ulanovskyWhatBatVoice2008}. From an engineering perspective, this ability is more than a biological curiosity as acoustic sensing keeps working in exactly those conditions in which optical sensors such as cameras and lidar sensors struggle (darkness, smoke, dust, fog and transparent or reflective surfaces). Furthermore, ultrasonic sensors themselves are cheap, small and robust and can perform high resolution imaging on complex environments \cite{steckelBroadband3DSonar2013, kerstensERTISFullyEmbedded2019}. 
+
+Early work on sonar-based mapping modeled the environment as a set of geometric primitives (e.g. planes, edges and cilinders), which were tracked in an extended Kalman filter \cite{leonardMobileRobotLocalization1991, tardosRobustMappingLocalization2002}. This approach requires reliable extraction of such primitives from sparse and noisy range readings, which is not always possible in real-world scenarios.
+
+In our earlier work we implemented a biologically inspired SLAM system called BatSLAM \cite{steckelBatSLAMSimultaneousLocalization2013}. In this algorithm we combined a biomimetic binaural sonar (where the receivers replicated the outer ears of a bat), with a topological model called RatSLAM. This RatSLAM model is a biologically inspired SLAM system based on a model of the rodent hippocampus \cite{milfordRatSLAMHippocampalModel2004, milfordMappingSuburbSingle2008} that creates topological maps of the environment that simultaneously has geometrically valid properties. Instead of extracting landmarks from the received signals, BatSLAM used the complete binaural cochleogram of each echo train as a local view, and recognized robot poses by comparing these views with a database of templates. Later work confirmed that bat-like sonar views indeed carry enough information to recognize real-world complex places \cite{vanderelstPlaceRecognitionUsing2016}. The weak point of such an approach, however, is ambiguity. Many places produce similar local view templates (ie, similar echo trains received by the sonar sensor). A typical example is the two parallel corridors with plain walls that produce nearly constant echo trains irrespective of the position of the robot in that corridor. This can cause false place matches to be injected into the map with full confidence, that subsequently pulls geometrically distinct places onto each other. In the SLAM literature, this failure mode is called map collapse, and it is one of the main reasons why loop closure is typically treated as the most dangerous step in the SLAM pipeline \cite{cadenaPastPresentFuture2016, lowryVisualPlaceRecognition2016}.
+
+Typically, two families of techniques are used against false loop closures. On the one hand, the front-end can demand temporal consistency, and compare sequences of views rather than single views, as in SeqSLAM \cite{milfordSeqSLAMVisualRoutebased2012}. On the other hand, the back-end can treat loop closures as potentially being outliers (i.e. false loop closures), using robust cost functions, switchable constraints \cite{sunderhaufSwitchableConstraintsRobust2012}, dynamic covariance scaling \cite{agarwalRobustMapOptimization2013}, max-mixtures \cite{olsonInferenceNetworksMixtures2013}, clustering and consistency checks \cite{latifRobustLoopClosing2013, mangelsonPairwiseConsistentMeasurement2018} or graduated non-convexity methods \cite{yangGraduatedNonConvexityRobust2020}. Both families were developed mostly for SLAM systems relying on vision and lidar, but could fundamentally be applied to other modalities such as in-air sonar. The question of how well they carry over to the much more ambiguous sonar views has, to the best of our knowledge, not been answered so far.
+
+In this paper, we introduce BatSLAM 2.0, a novel sonar-only SLAM system that revisits the original BatSLAM idea with a modern and robust SLAM back-end. The system replaces the pose cells and the experience map of BatSLAM with a factor-graph pose graph solved with iSAM2 \cite{kaessISAM2IncrementalSmoothing2012} in GTSAM \cite{dellaertFactorGraphsGTSAM2012}, and it keeps local view templates that are anchored to pose-graph nodes, so that each template has a position and an orientation that move with the optimized pose graph. 
+
+Around this core, we contribute four elements. Firstly, an acoustic front-end that adds an explicit direction cue to the  cochleogram: the spectral shape of each echo, which carries the directivity of the ears and the emitter, is separated from the echo magnitude, to more explicitly encode the direction of origin of the reflection. Secondly, a sequence verifier that keeps competing recognition hypotheses optional, and commits to a decision only when it is the loop closure is unambiguously valid. The required evidence to accept a loop closure grows with the geometric correction such commit would force on the map, and plausibility is tested against the relative uncertainty between the matched places. 
+
+Thirdly, we propose a link management system in the SLAM back-end, in which the links of every committed hypothesis form a group that can be withdrawn, audited and re-admitted, which allows false loop closures to be pruned efficiently. Fourthly, a simulation study of which information in a sonar view makes a place recognizable, and of the capture regions of individual view templates. Finally, we validate the system on a real recording of an embedded 3D sonar \cite{kerstensERTISFullyEmbedded2019}, whose microphone array we turned into two virtual ears by beamforming, with a lidar-based ground truth. A video of BatSLAM 2.0 in operation is available online.\footnote{\label{fn:video}\url{https://youtu.be/VzuYBWAR8kw}}
+
+The rest of the paper is structured as follows. First, we give an overview of the BatSLAM 2.0 system in section \ref{sec:overview}. Next, we derive the acoustic front-end in section \ref{sec:frontend}, after which we describe the recognition and verification of places in section \ref{sec:recognition} and the robust pose graph in section \ref{sec:backend}. In section \ref{sec:setup}, we detail the simulation setup, and in section \ref{sec:results} we present the results, including ablations and a robustness analysis. In section \ref{sec:real}, we apply the system to a real recording. Finally, we discuss the limitations of our work in section \ref{sec:limitations} and conclude the paper in section \ref{sec:conclusion}.
+
+\section{Overview of BatSLAM 2.0}
+\label{sec:overview}
+The overall processing flow of BatSLAM 2.0 can be found in figure \ref{fig:overview}, and the accompanying video (footnote \ref{fn:video}) shows it in operation. A broadband signal is emitted by an emitter, and the subsequent echoes are received and processed into a cochlear representation (see \cite{steckelBatSLAMSimultaneousLocalization2013}. The robot's odometry adds a new node to the pose graph for each measurement, connected to the previous node by an odometry factor. Each binaural echo cochleogram is converted into a local view descriptor by the acoustic front-end, which is subsequently compared with all stored templates. The best matches in this comparison become recognition candidates, which are handed to the sequence verifier. The sequence verifier checks whether subsequent measurements give rise to subsequent matches in the pose graph, which is a strong signal for recognizing correct loop closures, and then generates a loop closure hypothesis. When the verifier commits to a hypothesis, its matches become weak loop closure links in the pose graph, grouped per hypothesis, which can be withdrawn in a later stage by the link management subsystem in case of competing evidence becoming available. 
+
+\begin{figure*}[t]
+\centering
+\begin{tikzpicture}[
+  box/.style={draw=black!70, rounded corners=2pt, align=center, font=\footnotesize, text width=2.45cm, minimum height=#1},
+  box/.default=1.75cm,
+  arr/.style={-{Stealth[length=2mm]}, thick, black!70},
+  lab/.style={font=\scriptsize, black!65, align=center}]
+% main chain
+\node[box, fill=blue!6] (echo) at (0,0) {Binaural Echo\\ $s_L(t)$, $s_R(t)$};
+\node[box, fill=blue!6] (fe) at (3.4,0) {Acoustic Front-End\\ Local view $V$:\\ energy $E$, shape $S$\\ (Section \ref{sec:frontend})};
+\node[box, fill=blue!6] (tm) at (6.8,0) {Template Store\\ Five best matches\\ (Section \ref{sec:templates})};
+\node[box, fill=orange!10] (sv) at (10.2,0) {Sequence Verifier\\ Hypotheses,\\ evidence, plausibility,\\ risk-scaled commit\\ (Section \ref{sec:verifier})};
+\node[box, fill=green!8] (pg) at (13.6,0) {Pose Graph\\ (iSAM2)\\ Odometry and\\ weak links\\ (Section \ref{sec:backend})};
+% second row and input
+\node[box=1.0cm, fill=blue!6] (lay) at (6.8,-2.5) {Lay New Template\\ Anchored to node $i$};
+\node[box=1.0cm, fill=green!8] (lm) at (13.6,-2.8) {Link Management\\ Length rule, residual\\ check, GNC audit};
+\node[box=0.7cm, fill=white] (odo) at (14.2,2.3) {Odometry $u_i$};
+% arrows
+\draw[arr] (echo) -- (fe);
+\draw[arr] (fe) -- (tm);
+\draw[arr] (tm) -- (sv);
+\draw[arr] (sv) -- (pg);
+\draw[arr] (odo.south) -- (odo.south |- pg.north);
+\draw[arr] (pg) -- (lm);
+\draw[arr, dashed] ($(pg.north)+(-0.6,0)$) -- ++(0,0.5) -| node[lab, pos=0.27, above] {Current estimate of the map} (sv.north);
+\coordinate (wa) at ($(lm.north)+(-0.8,0)$);
+\coordinate (wb) at ($(sv.south)+(0.5,0)$);
+\draw[arr] (wa) -- ++(0,0.5) coordinate (wc) -- node[lab, pos=0.55, below] {Withdraw /\\ re-admit} (wc -| wb) -- (wb);
+\draw[arr, dashed] ($(sv.south)+(-0.5,0)$) |- node[lab, pos=0.75, above] {Locked on} (lay.east);
+\draw[arr] (fe.south) |- (lay.west);
+\draw[arr] (lay.north) -- (tm.south);
+\end{tikzpicture}
+\caption{Overview of the processing flow of BatSLAM 2.0. For every pulse, the binaural echo is converted into a local view $V$ with an energy image $E$ and a spectral-shape image $S$ (the direction cue), which is compared with all stored templates. The five best matches are candidates for the sequence verifier, which keeps several recognition hypotheses alive and commits to one only when it is long, strong, unambiguous and plausible given the current pose uncertainty. A committed hypothesis injects weak loop closure links into the pose graph, which is solved incrementally with iSAM2. The links of every hypothesis form a group that the link management can withdraw from the graph or re-admit later. New templates are anchored to pose-graph nodes, so that their poses follow every optimization, and no templates are laid while the robot is locked onto known territory.}
+\label{fig:overview}
+\end{figure*}
+
+\section{The acoustic front-end}
+\label{sec:frontend}
+In this section, we describe how a binaural echo train is converted into the local view that is used for place recognition. We start from a model of the received signals, after which we describe the cochlear processing and the two images that make up the local view. The processing steps are illustrated on a simulated pulse in figure \ref{fig:frontend}.
+
+\subsection{Echo formation}
+The robot emits a broadband call $s_e(t)$ (in our case a downward frequency-modulated sweep from \SI{90}{\kilo\hertz} to \SI{30}{\kilo\hertz}) and receives the echoes with two ears. During emission, the call is filtered by the directivity of the emitter transducer, modeled as an impulse response $h_e(t,\psi)$ for every direction $\psi$. Every reflector adds its own filtering $h_{r,n}(t)$, and upon reception, the echo is filtered by the directivity of the left and right ear, $h_L(t,\psi)$ and $h_R(t,\psi)$. For $N$ reflectors, the signal received by the left ear can then be written as follows:
+\begin{equation}
+\begin{aligned}
+s_L(t) = \sum_{n=1}^{N} a_n \cdot {}& h_L(t,\psi_n) * h_{r,n}(t) * h_e(t,\psi_n) \\
+& * s_e(t - \tau_n) + w_L(t),
+\end{aligned}
+\label{eq:echo}
+\end{equation}
+%
+with $*$ denoting the time-domain convolution, $\psi_n$ the direction of the $n$-th reflector, $\tau_n = 2 r_n / c$ its round-trip delay (with $r_n$ its distance and $c = \SI{343}{\meter\per\second}$), $a_n$ the attenuation due to spherical spreading, and $w_L(t)$ additive sensor noise. The right ear follows by replacing $L$ with $R$ in these equations. The reflector filtering $h_{r,n}(t)$ also includes the frequency-dependent atmospheric absorption along the path \cite{iso9613AcousticsAttenuationSound1993}. In the frequency domain, the combined filtering of emitter and ear becomes a product, the Echolocation-Related Transfer Function (ERTF):
+\begin{equation}
+\begin{aligned}
+H^E_L(f,\psi) &= H_e(f,\psi) \cdot H_L(f,\psi), \\
+H^E_R(f,\psi) &= H_e(f,\psi) \cdot H_R(f,\psi),
+\end{aligned}
+\end{equation}
+%
+where $H_e$, $H_L$ and $H_R$ are the Fourier transforms of the impulse responses above, i.e., the directivity of the emitter and the Head-Related Transfer Functions (HRTFs) of both ears. 
+
+\subsection{Cochlear processing}
+Following the original BatSLAM \cite{steckelBatSLAMSimultaneousLocalization2013} and the spectrogram correlation and transformation receiver \cite{peremansSpectrogramCorrelationTransformation1998}, we model the cochlea as a bank of bandpass filters followed by an envelope detector. Before that, we compress every echo into a short pulse with a matched filter, i.e., a correlation with the emitted call, which improves the range resolution. For frequency channel $k$ of the left and the right ear, this yields:
+\begin{equation}
+\begin{aligned}
+x_{L,k}(t) &= s_L(t) * s_e(-t) * g_k(t), \\
+x_{R,k}(t) &= s_R(t) * s_e(-t) * g_k(t),
+\end{aligned}
+\end{equation}
+%
+where $g_k(t)$ is a bandpass filter with a Gaussian frequency response on a logarithmic frequency axis, centered at $f_k$ and with a width of two channel spacings. We use $K = 64$ channels, logarithmically spaced between \SI{30}{\kilo\hertz} and \SI{90}{\kilo\hertz}. The envelope of every channel is the magnitude of its analytic signal, obtained with the Hilbert transform $\mathcal{H}$ \cite{marpleComputingDiscretetimeAnalytic1999}:
+\begin{equation}
+\begin{aligned}
+e_{L,k}(t) &= \sqrt{x_{L,k}(t)^2 + \mathcal{H}\big(x_{L,k}(t)\big)^2}, \\
+e_{R,k}(t) &= \sqrt{x_{R,k}(t)^2 + \mathcal{H}\big(x_{R,k}(t)\big)^2}.
+\end{aligned}
+\end{equation}
+%
+In practice, we compute the filtering and the Hilbert transform in one step, by keeping only the positive frequencies of each channel in the frequency domain. As every channel is narrow, its envelope can also be computed from a short inverse Fourier transform of only the frequency bins that the channel occupies, which yields the envelope at a decimated rate and reduces the cost of the front-end by a factor of about 15 (from roughly \SI{300}{\milli\second} to \SI{25}{\milli\second} of compute time per pulse in our Python implementation, at a correlation of 0.999 with the full-rate computation).
+
+Next, the envelopes are converted to range $r = c \cdot t / 2$, and their power is averaged in range bins of \SI{6}{\centi\meter} between \SI{0.25}{\meter} and \SI{10}{\meter} (162 bins), and over pairs of neighboring channels (32 channels). We write the result as $P_L[k,b]$ and $P_R[k,b]$, with $k$ the channel and $b$ the range bin.
+
+\textbf{Time-varying gain:} Echoes from far away are weaker than echoes from nearby objects by tens of decibels (figure \ref{fig:frontend}, panel b)). Bats compensate for this partially, by reducing their hearing sensitivity right after each call and restoring it over time. We apply a similar time-varying gain (TVG), which multiplies the amplitude of every range bin with its range $r_b$, compensating one of the two spreading factors:
+\begin{equation}
+\tilde{P}_L[k,b] = r_b^2 \cdot P_L[k,b], \qquad \tilde{P}_R[k,b] = r_b^2 \cdot P_R[k,b].
+\end{equation}
+
+\subsection{The local view}
+After these initial processing steps, we construct the local view which consists of two images per ear, each of $32 \times 162$ pixels (frequency channel, range bin). The first one, which we call the \emph{energy image}, is the echo amplitude relative to the strongest bin of the view, compressed with a cube root:
+\begin{equation}
+\begin{aligned}
+E_L[k,b] &= \left( \frac{\tilde{P}_L[k,b]}{P_{\max}} \right)^{1/6}, \\
+E_R[k,b] &= \left( \frac{\tilde{P}_R[k,b]}{P_{\max}} \right)^{1/6},
+\end{aligned}
+\end{equation}
+%
+where $P_{\max}$ is the maximum of $\tilde{P}$ over both ears, all channels and all range bins, and the power $1/6$ corresponds to the cube root of the amplitude (which as an additional square root term). In contrast to the logarithmic compression of the original BatSLAM, this compression has no floor parameter that needs to be adapted to the noise level of the sensor.
+
+The second image, which we call the \emph{spectral-shape image}, captures the direction cue of the echoes, which is dominated by the spectral content of the received echo. As shown in equation \ref{eq:echo}, every echo is filtered by the ERTF of the direction it arrives from, which gives it a characteristic spectrum. To separate this spectral shape from the level of the echo, we subtract, per range bin, the mean level over all channels:
+\begin{equation}
+\begin{aligned}
+S_L[k,b] &= \frac{D_L[k,b] - \bar{D}_L[b]}{\SI{15}{\deci\bel}}, \\
+S_R[k,b] &= \frac{D_R[k,b] - \bar{D}_R[b]}{\SI{15}{\deci\bel}},
+\end{aligned}
+\label{eq:shape}
+\end{equation}
+%
+where $D_L[k,b] = 10 \log_{10} \big( \tilde{P}_L[k,b] / P_{\max} \big)$ is the level of a bin in decibels (and likewise $D_R$), and $\bar{D}_L[b]$ and $\bar{D}_R[b]$ are the means over the 32 channels. We clip both images to the interval $[-1, 1]$, and set it to zero in bins that are more than \SI{40}{\deci\bel} below $P_{\max}$, as these contain no echo energy. Both images are smoothed along range with a Gaussian kernel of one bin (\SI{6}{\centi\meter}), so that a template tolerates a few centimeters of displacement.
+
+Finally, the energy images of both ears are concatenated into $E = (E_L | E_R)$, and the spectral-shape images into $S = (S_L | S_R)$, with $|$ denoting concatenation. Each of both is normalized to zero mean and unit energy, and together they form the local view:
+\begin{equation}
+V = \left( \frac{E - \mu_E}{\| E - \mu_E \|} \; \bigg| \; \frac{S - \mu_S}{\| S - \mu_S \|} \right),
+\end{equation}
+%
+with $\mu_E$ and $\mu_S$ the means of both images. This gives both images the same weight, independently of their dynamic range. The local view $V$ has 20,736 elements (\SI{83}{\kilo\byte} in single precision).
+
+Figure \ref{fig:scenes} shows the local views of five places, together with the scene around the robot. Panels a) and b) show the same place in a corridor of the indoor floor, on two visits that are \SI{641}{\meter} of travel apart. Both local views are nearly identical, with a similarity of 0.89 (equation \ref{eq:similarity} below). Panel c) shows the view of another place that is most similar to b), among all earlier pulses of the drive. At first sight, it looks alike, as both views are dominated by the echoes of the walls of a junction, but the echoes arrive at different ranges, and their spectral shapes differ, which yields a similarity of only 0.69. Panels d) and e) show a place in the pillar hall, where the local view consists of the isolated echoes of individual pillars, and a place in a street of the city world.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/frontendSteps.pdf}
+\caption{Processing steps of the acoustic front-end, illustrated on pulse 2600 of the development drive on the indoor floor. Panel a) shows the received binaural echo train, normalized per ear, as a function of range. Panel b) shows the output of the matched filter for the left ear in decibels, which reveals weak echoes up to \SI{10}{\meter} that are invisible in the raw signal. Panel c) shows the fine cochleogram (64 bands between \SI{30}{\kilo\hertz} and \SI{90}{\kilo\hertz}, \SI{3}{\centi\meter} range bins) as linear amplitude, for both ears (bands low to high within each ear), and panel d) shows the same cochleogram after the time-varying gain. Panel e) shows the energy image $E$ of the descriptor (32 pooled bands, \SI{6}{\centi\meter} range bins, cube-root compression), and panel f) the spectral-shape image $S$ (red: bands above the mean level of the range bin, blue: below), which carries the direction-dependent filtering of the ears and the emitter. The speckle in panel f) beyond \SI{5}{\meter} is noise that passes the level mask.}
+\label{fig:frontend}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/sceneSnapshots.pdf}
+\caption{Snapshots of five places and their local views. The top row shows the scene within \SI{5}{\meter} of the robot (circle, with an arrow for its heading), with the frontal half-space of the sonar shaded in blue and the complete route in light grey. The middle row shows the energy image $E$ and the bottom row the spectral-shape image $S$ of the local view (red: above the mean level of the range bin, blue: below), each with the left ear above the right ear. Panels a) and b) show the same place in a corridor of the indoor floor, visited \SI{641}{\meter} of travel apart; panel c) shows the view of another place, \SI{7.7}{\meter} away, that is most similar to b) among all earlier pulses of the drive; panel d) shows the pillar hall of the indoor floor, and panel e) a street in the city. The similarity $s$ is 0.89 between a) and b), and 0.69 between b) and c).}
+\label{fig:scenes}
+\end{figure*}
+
+% ---------------------------------------------------------------------------------------
+\input{sections/recognition}
+\input{sections/backend}
+\input{sections/setup}
+\input{sections/results}
+\input{sections/realworld}
+\input{sections/discussion}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\clearpage
+\onecolumn
+\appendices
+\input{sections/appendix}
+
+\end{document}

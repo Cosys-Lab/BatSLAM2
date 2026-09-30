@@ -1,0 +1,14 @@
+\begin{tabular}{lrrrrrr}
+\toprule
+Variant & $-10$~dB sensor & $-20$~dB sensor & Original sensor & Route 3, seed 3 & Wrong (final) & Wrong (all) \\
+\midrule
+No risk-scaled commit & 0.26 (0) & 0.24 (0) & 1.06 (1) & 0.19 (0) & 1 & 10 \\
+Risk-scaled commit, length only (24 pairs) & 0.26 (0) & 0.24 (0) & 0.25 (0) & 0.19 (0) & 0 & 5 \\
+Plausibility gate on the absolute marginal & 0.26 (0) & 0.23 (0) & 0.69 (1) & 0.19 (0) & 1 & 12 \\
+No plausibility gate & 0.26 (0) & 1.37 (2) & 0.60 (1) & 0.19 (0) & 3 & 19 \\
+No length rule & 0.26 (0) & 0.81 (2) & 1.07 (3) & 0.20 (2) & 7 & 7 \\
+No link management & 0.26 (0) & 0.81 (2) & 1.07 (3) & 0.20 (2) & 7 & 7 \\
+\midrule
+\textbf{Full system (ours)} & 0.26 (0) & 0.81 (1) & 0.25 (0) & 0.19 (0) & 1 & 6 \\
+\bottomrule
+\end{tabular}

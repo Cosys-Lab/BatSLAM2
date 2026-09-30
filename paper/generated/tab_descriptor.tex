@@ -1,0 +1,25 @@
+\begin{tabular}{llrrrr}
+\toprule
+ & & \multicolumn{2}{c}{Indoor floor} & \multicolumn{2}{c}{City} \\
+\cmidrule(lr){3-4}\cmidrule(lr){5-6}
+Group & Variant & Top-1 $\uparrow$ & AUC $\uparrow$ & Top-1 $\uparrow$ & AUC $\uparrow$ \\
+\midrule
+Cues & Energy & 0.875 & 0.915 & 0.878 & 0.918 \\
+Cues & Energy + shape \textbf{(ours)} & 0.913 & 0.945 & 0.888 & 0.938 \\
+Cues & Energy + ILD & 0.867 & 0.959 & 0.859 & 0.954 \\
+Cues & Energy + shape + ILD & 0.892 & 0.968 & 0.878 & 0.960 \\
+Cues & Shape alone & 0.912 & 0.956 & 0.827 & 0.921 \\
+Cues & ILD alone & 0.802 & 0.939 & 0.753 & 0.926 \\
+\midrule
+Compression & Log, floor -30 dB & 0.884 & 0.930 & 0.888 & 0.930 \\
+Compression & Log, floor -50 dB & 0.929 & 0.947 & 0.886 & 0.925 \\
+Compression & Amplitude$^{1/3}$ \textbf{(ours)} & 0.913 & 0.948 & 0.888 & 0.937 \\
+Compression & Amplitude$^{1/2}$ & 0.900 & 0.940 & 0.889 & 0.937 \\
+Compression & Linear amplitude & 0.858 & 0.925 & 0.857 & 0.921 \\
+\midrule
+Matching & 2013 paper: unit-energy Euclidean, energy log -30 & 0.401 & 0.801 & 0.599 & 0.814 \\
+Matching & 2013 paper: unit-energy Euclidean, energy+shape & 0.793 & 0.901 & 0.802 & 0.889 \\
+\midrule
+Mask & Shape mask: detection (6 dB over noise) & 0.901 & 0.942 & 0.882 & 0.947 \\
+\bottomrule
+\end{tabular}
