@@ -1,0 +1,16 @@
+# datasets and front-end caches (generated, large)
+data/*
+!data/README.md
+*.desc_*.npz
+
+# run output
+results/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+
+# MATLAB
+*.asv

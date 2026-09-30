@@ -1,0 +1,142 @@
+[
+ {
+  "name": "r3_b0_s1",
+  "dataset": "indoor_r3.mat",
+  "config": {},
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "r3_b025_s1",
+  "dataset": "indoor_r3.mat",
+  "config": {},
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1
+ },
+ {
+  "name": "r3_b0_s2",
+  "dataset": "indoor_r3.mat",
+  "config": {},
+  "odom_bias_factor": 0.0,
+  "odom_seed": 2
+ },
+ {
+  "name": "r3_b025_s2",
+  "dataset": "indoor_r3.mat",
+  "config": {},
+  "odom_bias_factor": 0.25,
+  "odom_seed": 2
+ },
+ {
+  "name": "r3_b0_s3",
+  "dataset": "indoor_r3.mat",
+  "config": {},
+  "odom_bias_factor": 0.0,
+  "odom_seed": 3
+ },
+ {
+  "name": "r3_b025_s3",
+  "dataset": "indoor_r3.mat",
+  "config": {},
+  "odom_bias_factor": 0.25,
+  "odom_seed": 3
+ },
+ {
+  "name": "r5_b0",
+  "dataset": "indoor_r5.mat",
+  "config": {},
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "r5_b025",
+  "dataset": "indoor_r5.mat",
+  "config": {},
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1
+ },
+ {
+  "name": "r7_b0",
+  "dataset": "indoor_r7.mat",
+  "config": {},
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "r7_b025",
+  "dataset": "indoor_r7.mat",
+  "config": {},
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1
+ },
+ {
+  "name": "city_b0",
+  "dataset": "city.mat",
+  "config": {},
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "city_b025",
+  "dataset": "city.mat",
+  "config": {},
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1
+ },
+ {
+  "name": "noise5e-6_b0",
+  "dataset": "indoor_r3_noise5e-6.mat",
+  "config": {},
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "noise1.5e-5_b0",
+  "dataset": "indoor_r3_noise1.5e-5.mat",
+  "config": {},
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "oldsensor_b0",
+  "dataset": "indoor_r3_oldsensor.mat",
+  "config": {},
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "r3_b1_s1",
+  "dataset": "indoor_r3.mat",
+  "config": {},
+  "odom_bias_factor": 1.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "r3_b1_s2",
+  "dataset": "indoor_r3.mat",
+  "config": {},
+  "odom_bias_factor": 1.0,
+  "odom_seed": 2
+ },
+ {
+  "name": "r3_b1_s3",
+  "dataset": "indoor_r3.mat",
+  "config": {},
+  "odom_bias_factor": 1.0,
+  "odom_seed": 3
+ },
+ {
+  "name": "r5_b1",
+  "dataset": "indoor_r5.mat",
+  "config": {},
+  "odom_bias_factor": 1.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "hall_b0",
+  "dataset": "hall.mat",
+  "config": {},
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ }
+]

@@ -1,0 +1,101 @@
+[
+ {
+  "name": "bias0_s4",
+  "dataset": "indoor_r3.mat",
+  "config": {},
+  "odom_bias_factor": 0.0,
+  "odom_seed": 4
+ },
+ {
+  "name": "bias0_s5",
+  "dataset": "indoor_r3.mat",
+  "config": {},
+  "odom_bias_factor": 0.0,
+  "odom_seed": 5
+ },
+ {
+  "name": "bias0.25_s4",
+  "dataset": "indoor_r3.mat",
+  "config": {},
+  "odom_bias_factor": 0.25,
+  "odom_seed": 4
+ },
+ {
+  "name": "bias0.25_s5",
+  "dataset": "indoor_r3.mat",
+  "config": {},
+  "odom_bias_factor": 0.25,
+  "odom_seed": 5
+ },
+ {
+  "name": "bias0.5_s4",
+  "dataset": "indoor_r3.mat",
+  "config": {},
+  "odom_bias_factor": 0.5,
+  "odom_seed": 4
+ },
+ {
+  "name": "bias0.5_s5",
+  "dataset": "indoor_r3.mat",
+  "config": {},
+  "odom_bias_factor": 0.5,
+  "odom_seed": 5
+ },
+ {
+  "name": "bias1_s4",
+  "dataset": "indoor_r3.mat",
+  "config": {},
+  "odom_bias_factor": 1.0,
+  "odom_seed": 4
+ },
+ {
+  "name": "bias1_s5",
+  "dataset": "indoor_r3.mat",
+  "config": {},
+  "odom_bias_factor": 1.0,
+  "odom_seed": 5
+ },
+ {
+  "name": "bias2_s4",
+  "dataset": "indoor_r3.mat",
+  "config": {},
+  "odom_bias_factor": 2.0,
+  "odom_seed": 4
+ },
+ {
+  "name": "bias2_s5",
+  "dataset": "indoor_r3.mat",
+  "config": {},
+  "odom_bias_factor": 2.0,
+  "odom_seed": 5
+ },
+ {
+  "name": "odomnoise_x3_b025",
+  "dataset": "indoor_r3.mat",
+  "config": {},
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1,
+  "odom_noise_factor": 3.0
+ },
+ {
+  "name": "noise5e-6_b025",
+  "dataset": "indoor_r3_noise5e-6.mat",
+  "config": {},
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1
+ },
+ {
+  "name": "noise1.5e-5_b025",
+  "dataset": "indoor_r3_noise1.5e-5.mat",
+  "config": {},
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1
+ },
+ {
+  "name": "oldsensor_b025",
+  "dataset": "indoor_r3_oldsensor.mat",
+  "config": {},
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1
+ }
+]

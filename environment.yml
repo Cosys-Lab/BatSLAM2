@@ -1,0 +1,10 @@
+name: batslam2
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - gtsam=4.2
+  - numpy>=2
+  - scipy
+  - matplotlib
+  - pytest

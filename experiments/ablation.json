@@ -1,0 +1,802 @@
+[
+ {
+  "name": "full__r3_b0_s1",
+  "dataset": "indoor_r3.mat",
+  "config": {},
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "full__r5_b0",
+  "dataset": "indoor_r5.mat",
+  "config": {},
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "full__r7_b025",
+  "dataset": "indoor_r7.mat",
+  "config": {},
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1
+ },
+ {
+  "name": "full__city_b0",
+  "dataset": "city.mat",
+  "config": {},
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_deferral__r3_b0_s1",
+  "dataset": "indoor_r3.mat",
+  "config": {
+   "recognition": {
+    "defer_correction_m": null
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_deferral__r5_b0",
+  "dataset": "indoor_r5.mat",
+  "config": {
+   "recognition": {
+    "defer_correction_m": null
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_deferral__r7_b025",
+  "dataset": "indoor_r7.mat",
+  "config": {
+   "recognition": {
+    "defer_correction_m": null
+   }
+  },
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_deferral__city_b0",
+  "dataset": "city.mat",
+  "config": {
+   "recognition": {
+    "defer_correction_m": null
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_deferral_quality__r3_b0_s1",
+  "dataset": "indoor_r3.mat",
+  "config": {
+   "recognition": {
+    "defer_min_llr_per_pair": 0.0,
+    "defer_min_evidence": 0.0
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_deferral_quality__r5_b0",
+  "dataset": "indoor_r5.mat",
+  "config": {
+   "recognition": {
+    "defer_min_llr_per_pair": 0.0,
+    "defer_min_evidence": 0.0
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_deferral_quality__r7_b025",
+  "dataset": "indoor_r7.mat",
+  "config": {
+   "recognition": {
+    "defer_min_llr_per_pair": 0.0,
+    "defer_min_evidence": 0.0
+   }
+  },
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_deferral_quality__city_b0",
+  "dataset": "city.mat",
+  "config": {
+   "recognition": {
+    "defer_min_llr_per_pair": 0.0,
+    "defer_min_evidence": 0.0
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "deferral_length_only_24__r3_b0_s1",
+  "dataset": "indoor_r3.mat",
+  "config": {
+   "recognition": {
+    "defer_min_pairs": 24,
+    "defer_min_llr_per_pair": 0.0,
+    "defer_min_evidence": 0.0
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "deferral_length_only_24__r5_b0",
+  "dataset": "indoor_r5.mat",
+  "config": {
+   "recognition": {
+    "defer_min_pairs": 24,
+    "defer_min_llr_per_pair": 0.0,
+    "defer_min_evidence": 0.0
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "deferral_length_only_24__r7_b025",
+  "dataset": "indoor_r7.mat",
+  "config": {
+   "recognition": {
+    "defer_min_pairs": 24,
+    "defer_min_llr_per_pair": 0.0,
+    "defer_min_evidence": 0.0
+   }
+  },
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1
+ },
+ {
+  "name": "deferral_length_only_24__city_b0",
+  "dataset": "city.mat",
+  "config": {
+   "recognition": {
+    "defer_min_pairs": 24,
+    "defer_min_llr_per_pair": 0.0,
+    "defer_min_evidence": 0.0
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_length_rule__r3_b0_s1",
+  "dataset": "indoor_r3.mat",
+  "config": {
+   "graph": {
+    "min_group_links": 0
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_length_rule__r5_b0",
+  "dataset": "indoor_r5.mat",
+  "config": {
+   "graph": {
+    "min_group_links": 0
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_length_rule__r7_b025",
+  "dataset": "indoor_r7.mat",
+  "config": {
+   "graph": {
+    "min_group_links": 0
+   }
+  },
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_length_rule__city_b0",
+  "dataset": "city.mat",
+  "config": {
+   "graph": {
+    "min_group_links": 0
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_link_management__r3_b0_s1",
+  "dataset": "indoor_r3.mat",
+  "config": {
+   "graph": {
+    "link_management": false
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_link_management__r5_b0",
+  "dataset": "indoor_r5.mat",
+  "config": {
+   "graph": {
+    "link_management": false
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_link_management__r7_b025",
+  "dataset": "indoor_r7.mat",
+  "config": {
+   "graph": {
+    "link_management": false
+   }
+  },
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_link_management__city_b0",
+  "dataset": "city.mat",
+  "config": {
+   "graph": {
+    "link_management": false
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_sequence__r3_b0_s1",
+  "dataset": "indoor_r3.mat",
+  "config": {
+   "recognition": {
+    "min_pairs": 1,
+    "min_templates": 1,
+    "commit_evidence": 0.0,
+    "ambiguity_margin": 0.0,
+    "defer_correction_m": null
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_sequence__r5_b0",
+  "dataset": "indoor_r5.mat",
+  "config": {
+   "recognition": {
+    "min_pairs": 1,
+    "min_templates": 1,
+    "commit_evidence": 0.0,
+    "ambiguity_margin": 0.0,
+    "defer_correction_m": null
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_sequence__r7_b025",
+  "dataset": "indoor_r7.mat",
+  "config": {
+   "recognition": {
+    "min_pairs": 1,
+    "min_templates": 1,
+    "commit_evidence": 0.0,
+    "ambiguity_margin": 0.0,
+    "defer_correction_m": null
+   }
+  },
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_sequence__city_b0",
+  "dataset": "city.mat",
+  "config": {
+   "recognition": {
+    "min_pairs": 1,
+    "min_templates": 1,
+    "commit_evidence": 0.0,
+    "ambiguity_margin": 0.0,
+    "defer_correction_m": null
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_plausibility_gate__r3_b0_s1",
+  "dataset": "indoor_r3.mat",
+  "config": {
+   "recognition": {
+    "plausibility_chi2": null
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_plausibility_gate__r5_b0",
+  "dataset": "indoor_r5.mat",
+  "config": {
+   "recognition": {
+    "plausibility_chi2": null
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_plausibility_gate__r7_b025",
+  "dataset": "indoor_r7.mat",
+  "config": {
+   "recognition": {
+    "plausibility_chi2": null
+   }
+  },
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_plausibility_gate__city_b0",
+  "dataset": "city.mat",
+  "config": {
+   "recognition": {
+    "plausibility_chi2": null
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_relative_gate__r3_b0_s1",
+  "dataset": "indoor_r3.mat",
+  "config": {
+   "recognition": {
+    "plausibility_relative": false
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_relative_gate__r5_b0",
+  "dataset": "indoor_r5.mat",
+  "config": {
+   "recognition": {
+    "plausibility_relative": false
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_relative_gate__r7_b025",
+  "dataset": "indoor_r7.mat",
+  "config": {
+   "recognition": {
+    "plausibility_relative": false
+   }
+  },
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_relative_gate__city_b0",
+  "dataset": "city.mat",
+  "config": {
+   "recognition": {
+    "plausibility_relative": false
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_tvg__r3_b0_s1",
+  "dataset": "indoor_r3.mat",
+  "config": {
+   "frontend": {
+    "range_gain_exponent": 0.0
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_tvg__r5_b0",
+  "dataset": "indoor_r5.mat",
+  "config": {
+   "frontend": {
+    "range_gain_exponent": 0.0
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_tvg__r7_b025",
+  "dataset": "indoor_r7.mat",
+  "config": {
+   "frontend": {
+    "range_gain_exponent": 0.0
+   }
+  },
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_tvg__city_b0",
+  "dataset": "city.mat",
+  "config": {
+   "frontend": {
+    "range_gain_exponent": 0.0
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "energy_only__r3_b0_s1",
+  "dataset": "indoor_r3.mat",
+  "config": {
+   "frontend": {
+    "descriptor": "energy"
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "energy_only__r5_b0",
+  "dataset": "indoor_r5.mat",
+  "config": {
+   "frontend": {
+    "descriptor": "energy"
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "energy_only__r7_b025",
+  "dataset": "indoor_r7.mat",
+  "config": {
+   "frontend": {
+    "descriptor": "energy"
+   }
+  },
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1
+ },
+ {
+  "name": "energy_only__city_b0",
+  "dataset": "city.mat",
+  "config": {
+   "frontend": {
+    "descriptor": "energy"
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "old_frontend_8_wide_bands__r3_b0_s1",
+  "dataset": "indoor_r3.mat",
+  "config": {
+   "frontend": {
+    "n_channels": 8,
+    "band_pool": 1,
+    "range_bin": 0.03,
+    "range_blur_bins": 2.0,
+    "descriptor": "energy",
+    "compression": "log",
+    "log_floor_db": -30.0
+   },
+   "templates": {
+    "max_shift_bins": 6
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "old_frontend_8_wide_bands__r5_b0",
+  "dataset": "indoor_r5.mat",
+  "config": {
+   "frontend": {
+    "n_channels": 8,
+    "band_pool": 1,
+    "range_bin": 0.03,
+    "range_blur_bins": 2.0,
+    "descriptor": "energy",
+    "compression": "log",
+    "log_floor_db": -30.0
+   },
+   "templates": {
+    "max_shift_bins": 6
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "old_frontend_8_wide_bands__r7_b025",
+  "dataset": "indoor_r7.mat",
+  "config": {
+   "frontend": {
+    "n_channels": 8,
+    "band_pool": 1,
+    "range_bin": 0.03,
+    "range_blur_bins": 2.0,
+    "descriptor": "energy",
+    "compression": "log",
+    "log_floor_db": -30.0
+   },
+   "templates": {
+    "max_shift_bins": 6
+   }
+  },
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1
+ },
+ {
+  "name": "old_frontend_8_wide_bands__city_b0",
+  "dataset": "city.mat",
+  "config": {
+   "frontend": {
+    "n_channels": 8,
+    "band_pool": 1,
+    "range_bin": 0.03,
+    "range_blur_bins": 2.0,
+    "descriptor": "energy",
+    "compression": "log",
+    "log_floor_db": -30.0
+   },
+   "templates": {
+    "max_shift_bins": 6
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_range_shift__r3_b0_s1",
+  "dataset": "indoor_r3.mat",
+  "config": {
+   "templates": {
+    "max_shift_bins": 0
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_range_shift__r5_b0",
+  "dataset": "indoor_r5.mat",
+  "config": {
+   "templates": {
+    "max_shift_bins": 0
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_range_shift__r7_b025",
+  "dataset": "indoor_r7.mat",
+  "config": {
+   "templates": {
+    "max_shift_bins": 0
+   }
+  },
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_range_shift__city_b0",
+  "dataset": "city.mat",
+  "config": {
+   "templates": {
+    "max_shift_bins": 0
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "hand_set_evidence_constants__r3_b0_s1",
+  "dataset": "indoor_r3.mat",
+  "config": {
+   "recognition": {
+    "llr_mid": 0.75,
+    "llr_slope": 25.0
+   },
+   "templates": {
+    "min_similarity": 0.55
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "hand_set_evidence_constants__r5_b0",
+  "dataset": "indoor_r5.mat",
+  "config": {
+   "recognition": {
+    "llr_mid": 0.75,
+    "llr_slope": 25.0
+   },
+   "templates": {
+    "min_similarity": 0.55
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "hand_set_evidence_constants__r7_b025",
+  "dataset": "indoor_r7.mat",
+  "config": {
+   "recognition": {
+    "llr_mid": 0.75,
+    "llr_slope": 25.0
+   },
+   "templates": {
+    "min_similarity": 0.55
+   }
+  },
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1
+ },
+ {
+  "name": "hand_set_evidence_constants__city_b0",
+  "dataset": "city.mat",
+  "config": {
+   "recognition": {
+    "llr_mid": 0.75,
+    "llr_slope": 25.0
+   },
+   "templates": {
+    "min_similarity": 0.55
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_heading_gate__r3_b0_s1",
+  "dataset": "indoor_r3.mat",
+  "config": {
+   "templates": {
+    "gate_heading_rad": null
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_heading_gate__r5_b0",
+  "dataset": "indoor_r5.mat",
+  "config": {
+   "templates": {
+    "gate_heading_rad": null
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_heading_gate__r7_b025",
+  "dataset": "indoor_r7.mat",
+  "config": {
+   "templates": {
+    "gate_heading_rad": null
+   }
+  },
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_heading_gate__city_b0",
+  "dataset": "city.mat",
+  "config": {
+   "templates": {
+    "gate_heading_rad": null
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "naive__r3_b0_s1",
+  "dataset": "indoor_r3.mat",
+  "config": {
+   "recognition": {
+    "min_pairs": 1,
+    "min_templates": 1,
+    "commit_evidence": 0.0,
+    "ambiguity_margin": 0.0,
+    "defer_correction_m": null,
+    "plausibility_chi2": null
+   },
+   "graph": {
+    "link_management": false
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "naive__r5_b0",
+  "dataset": "indoor_r5.mat",
+  "config": {
+   "recognition": {
+    "min_pairs": 1,
+    "min_templates": 1,
+    "commit_evidence": 0.0,
+    "ambiguity_margin": 0.0,
+    "defer_correction_m": null,
+    "plausibility_chi2": null
+   },
+   "graph": {
+    "link_management": false
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "naive__r7_b025",
+  "dataset": "indoor_r7.mat",
+  "config": {
+   "recognition": {
+    "min_pairs": 1,
+    "min_templates": 1,
+    "commit_evidence": 0.0,
+    "ambiguity_margin": 0.0,
+    "defer_correction_m": null,
+    "plausibility_chi2": null
+   },
+   "graph": {
+    "link_management": false
+   }
+  },
+  "odom_bias_factor": 0.25,
+  "odom_seed": 1
+ },
+ {
+  "name": "naive__city_b0",
+  "dataset": "city.mat",
+  "config": {
+   "recognition": {
+    "min_pairs": 1,
+    "min_templates": 1,
+    "commit_evidence": 0.0,
+    "ambiguity_margin": 0.0,
+    "defer_correction_m": null,
+    "plausibility_chi2": null
+   },
+   "graph": {
+    "link_management": false
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ }
+]

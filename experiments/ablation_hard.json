@@ -1,0 +1,274 @@
+[
+ {
+  "name": "no_deferral__noise5e-6_b0",
+  "dataset": "indoor_r3_noise5e-6.mat",
+  "config": {
+   "recognition": {
+    "defer_correction_m": null
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_deferral__noise1.5e-5_b0",
+  "dataset": "indoor_r3_noise1.5e-5.mat",
+  "config": {
+   "recognition": {
+    "defer_correction_m": null
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_deferral__oldsensor_b0",
+  "dataset": "indoor_r3_oldsensor.mat",
+  "config": {
+   "recognition": {
+    "defer_correction_m": null
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_deferral__r3_b0_s3",
+  "dataset": "indoor_r3.mat",
+  "config": {
+   "recognition": {
+    "defer_correction_m": null
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 3
+ },
+ {
+  "name": "deferral_length_only_24__noise5e-6_b0",
+  "dataset": "indoor_r3_noise5e-6.mat",
+  "config": {
+   "recognition": {
+    "defer_min_pairs": 24,
+    "defer_min_llr_per_pair": 0.0,
+    "defer_min_evidence": 0.0
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "deferral_length_only_24__noise1.5e-5_b0",
+  "dataset": "indoor_r3_noise1.5e-5.mat",
+  "config": {
+   "recognition": {
+    "defer_min_pairs": 24,
+    "defer_min_llr_per_pair": 0.0,
+    "defer_min_evidence": 0.0
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "deferral_length_only_24__oldsensor_b0",
+  "dataset": "indoor_r3_oldsensor.mat",
+  "config": {
+   "recognition": {
+    "defer_min_pairs": 24,
+    "defer_min_llr_per_pair": 0.0,
+    "defer_min_evidence": 0.0
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "deferral_length_only_24__r3_b0_s3",
+  "dataset": "indoor_r3.mat",
+  "config": {
+   "recognition": {
+    "defer_min_pairs": 24,
+    "defer_min_llr_per_pair": 0.0,
+    "defer_min_evidence": 0.0
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 3
+ },
+ {
+  "name": "no_relative_gate__noise5e-6_b0",
+  "dataset": "indoor_r3_noise5e-6.mat",
+  "config": {
+   "recognition": {
+    "plausibility_relative": false
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_relative_gate__noise1.5e-5_b0",
+  "dataset": "indoor_r3_noise1.5e-5.mat",
+  "config": {
+   "recognition": {
+    "plausibility_relative": false
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_relative_gate__oldsensor_b0",
+  "dataset": "indoor_r3_oldsensor.mat",
+  "config": {
+   "recognition": {
+    "plausibility_relative": false
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_relative_gate__r3_b0_s3",
+  "dataset": "indoor_r3.mat",
+  "config": {
+   "recognition": {
+    "plausibility_relative": false
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 3
+ },
+ {
+  "name": "no_plausibility_gate__noise5e-6_b0",
+  "dataset": "indoor_r3_noise5e-6.mat",
+  "config": {
+   "recognition": {
+    "plausibility_chi2": null
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_plausibility_gate__noise1.5e-5_b0",
+  "dataset": "indoor_r3_noise1.5e-5.mat",
+  "config": {
+   "recognition": {
+    "plausibility_chi2": null
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_plausibility_gate__oldsensor_b0",
+  "dataset": "indoor_r3_oldsensor.mat",
+  "config": {
+   "recognition": {
+    "plausibility_chi2": null
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_plausibility_gate__r3_b0_s3",
+  "dataset": "indoor_r3.mat",
+  "config": {
+   "recognition": {
+    "plausibility_chi2": null
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 3
+ },
+ {
+  "name": "no_length_rule__noise5e-6_b0",
+  "dataset": "indoor_r3_noise5e-6.mat",
+  "config": {
+   "graph": {
+    "min_group_links": 0
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_length_rule__noise1.5e-5_b0",
+  "dataset": "indoor_r3_noise1.5e-5.mat",
+  "config": {
+   "graph": {
+    "min_group_links": 0
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_length_rule__oldsensor_b0",
+  "dataset": "indoor_r3_oldsensor.mat",
+  "config": {
+   "graph": {
+    "min_group_links": 0
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_length_rule__r3_b0_s3",
+  "dataset": "indoor_r3.mat",
+  "config": {
+   "graph": {
+    "min_group_links": 0
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 3
+ },
+ {
+  "name": "no_link_management__noise5e-6_b0",
+  "dataset": "indoor_r3_noise5e-6.mat",
+  "config": {
+   "graph": {
+    "link_management": false
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_link_management__noise1.5e-5_b0",
+  "dataset": "indoor_r3_noise1.5e-5.mat",
+  "config": {
+   "graph": {
+    "link_management": false
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_link_management__oldsensor_b0",
+  "dataset": "indoor_r3_oldsensor.mat",
+  "config": {
+   "graph": {
+    "link_management": false
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 1
+ },
+ {
+  "name": "no_link_management__r3_b0_s3",
+  "dataset": "indoor_r3.mat",
+  "config": {
+   "graph": {
+    "link_management": false
+   }
+  },
+  "odom_bias_factor": 0.0,
+  "odom_seed": 3
+ }
+]
