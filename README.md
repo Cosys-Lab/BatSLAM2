@@ -18,6 +18,9 @@ and the experiment definitions of the paper.
 (colored from start to end). Bottom: the trajectory estimated by BatSLAM 2.0 from the echoes and
 odometry alone.*
 
+**Video:** [a 3.5-minute overview](docs/BatSLAM2_overview.mp4) explains the method and shows a mapping run
+in simulation and on a real recording.
+
 ## How it works
 
 ```
